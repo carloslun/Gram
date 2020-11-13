@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from .models import Profile
 from django.db.utils import IntegrityError
 
+from users.forms import ProfileForm
+
 # Create your views here.
 def login_view(request):
 
@@ -54,16 +56,36 @@ def signup_view(request):
         return redirect('feed')
 
     return render(request, 'users/signup.html')
+
+
 @login_required
 def update_profile(request):
+
     profile = request.user.profile
-    print(profile.picture.url)
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            # print(form.cleaned_data) --> form.cleaned_data nos trae la informacion de los formularios
+            data = form.cleaned_data
+            profile.website = data['website']
+            profile.phone_number = data['phone_number']
+            profile.biography = data['biography']
+            profile.picture = data['picture']
+            profile.save()
+            return redirect('feed') 
+    else:
+        form = ProfileForm()
+
+
+    # profile = request.user.profile
+    # print(profile.picture.url)
     return render(
         request = request,
         template_name = 'users/update_profile.html',
         context = {
             'profile' : profile,
-            'user' : request.user
+            'user' : request.user,
+            'form': form
         }
         )
 
