@@ -18,7 +18,7 @@ class ProfileAdmin(admin.ModelAdmin):
         'user__last_name',
         'phone_number',
     )
-    list_filter = ('created', 'modified')
+    list_filter = ('created', 'modified') 
 
     fieldsets = (
         ('Profile',{

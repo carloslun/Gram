@@ -15,9 +15,9 @@
             <form action="{% url 'update_profile' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
 
-                {% if form.errors %}
-                <p>{{ form.errors }}</p>
-                {% endif %}
+                {% comment %} {% if form.errors %}
+                <p class="alert alert-danger">{{ form.errors }}</p>
+                {% endif %} {% endcomment %}
 
                 <div class="media">
                     {% if profile.picture %}
@@ -36,19 +36,27 @@
 
                 <div class="form-group">
                     <label>Website</label>
-                    <input class="form-control" type="url" name="website" placeholder="Website"
-                        value="{{ profile.website }}" />
+                    <input class="form-control {% if form.website.errors %}is-invalid{% endif %}" type="text" name="website" placeholder="Website"
+                        value="{% if form.errors %}{{form.website.value}}{% else %}{{profile.website}}{% endif %} " />
+                    <div class="{% if form.website.errors %}d-block invalid-feedback{% else %} d-none{% endif %}">{% for error in form.website.errors %}{{error}}{% endfor %}</div>
                 </div>
 
                 <div class="form-group">
                     <label>Biography</label>
-                    <textarea class="form-control" name="biography">{{ profile.biography }}</textarea>
+                    <textarea class="form-control {% if form.biography.errors %}is-invalid{% endif %}" name="biography">
+                    {% if form.errors %}{{form.biography.value}}{% else %}
+                    {{ profile.biography }}
+                    {% endif %}
+                    
+                    </textarea>
+                    <div class="{% if form.biography.errors %}d-block invalid-feedback {% else %}d-none {% endif %}">{% for error in form.biography.errors %}{{error}}{% endfor %}</div>
                 </div>
 
                 <div class="form-group">
                     <label>Phone number</label>
-                    <input class="form-control" type="text" name="phone_number" placeholder="Phone number"
-                        value="{{ profile.phone_number }}" />
+                    <input class="form-control {% if form.phone_number.errors %} is-invalid{% endif %}" type="text" name="phone_number" placeholder="Phone number"
+                        value="{% if form.errors %}{{form.phone_number.value}} {% else %}{{ profile.phone_number }}{% endif %} " />
+                    <div class="{% if form.phone_number.errors %}d-block invalid-feedback {% else %}d-none{% endif %}">{% for error in form.phone_number.errors %}{{error}}{% endfor %}</div>
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-block mt-5">Update info</button>
