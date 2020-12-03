@@ -3,11 +3,7 @@ from django import forms
 from django.contrib.auth.models import User
 from .models import Profile
 
-class ProfileForm(forms.Form):
-    website = forms.URLField(required=True)
-    biography = forms.CharField( max_length=200, required=True)
-    phone_number = forms.CharField( max_length=200, required=True)
-    picture = forms.ImageField(required=False)
+
 
     
 
@@ -52,7 +48,7 @@ class SignupForm(forms.Form):
         data = self.cleaned_data
         data.pop('password_confirmation')
         user = User.objects.create_user(**data)
-        profile = Profile(user=user)
+        profile = Profile(user=user) 
         profile.save()
         
         

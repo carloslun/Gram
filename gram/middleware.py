@@ -17,9 +17,9 @@ class ProfileCompletionMiddleware:
             if not profile.picture or not profile.biography:
 
                 # lista blanca para definir cuales url quedan fuera del middeleware
-                if request.path not in [reverse('update_profile'),
-                reverse('logout')] and not request.path.startswith(
+                if request.path not in [reverse('users:update_profile'),
+                reverse('users:logout')] and not request.path.startswith(
                         '/admin/'):
-                    return redirect('update_profile')
+                    return redirect('users:update_profile')
         response = self.get_response(request)
         return response
